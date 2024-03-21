@@ -354,6 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6315060851097166371}
   - component: {fileID: 412113329677492481}
+  - component: {fileID: 5313386957510268361}
   m_Layer: 0
   m_Name: IBlock
   m_TagString: Untagged
@@ -394,3 +395,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotationPoint: {x: 0.5, y: -0.5, z: 0}
   previousTime: 0
+  ClearLine: 0
+  spawner: {fileID: 0}
+--- !u!114 &5313386957510268361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6672803657204628239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f6b5414631363a43a68a938ef8f81f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

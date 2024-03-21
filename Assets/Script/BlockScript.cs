@@ -63,6 +63,11 @@ public class BlockScript : MonoBehaviour
             transform.position += new Vector3(0, -1, 0);
             if (!VaildMove())
             {
+                Debug.Log(this.gameObject.transform.position);
+                if(this.gameObject.transform.position == new Vector3(5,17,0))
+                {
+                    FindObjectOfType<SpawnTetrimino>().GameOver();
+                }
                 transform.position -= new Vector3(0, -1, 0);
                 AddToGrid();
                 CheckLines();
@@ -96,7 +101,12 @@ public class BlockScript : MonoBehaviour
             }
         }
         GameObject scoretext = GameObject.Find("ScoreText");
-        scoretext.GetComponent<ScoreScript>().ScoreNumber += 1000 * ClearLine;
+        ScoreScript.ScoreNumber += 1000 * ClearLine;
+        if(ScoreScript.ScoreNumber >= HighScoreScript.HighScore)
+        {
+            HighScoreScript.HighScore = ScoreScript.ScoreNumber;
+            PlayerPrefs.SetInt("HighScore",HighScoreScript.HighScore);
+        }
         ClearLine = 0;
     }
     bool HasLine(int i)
@@ -120,11 +130,7 @@ public class BlockScript : MonoBehaviour
 
             
         }
-        for (int l = 0; l < spawner.transform.childCount; l++)
-        {
-            if(spawner.transform.GetChild(l).transform.childCount<=1) Destroy(spawner.transform.GetChild(l).gameObject);
-            
-        }
+        
     }
 
     void RowDown(int i)

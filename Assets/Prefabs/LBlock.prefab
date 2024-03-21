@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2040440610598470443}
   - component: {fileID: 4337768739682306034}
+  - component: {fileID: 5603744349951592154}
   m_Layer: 0
   m_Name: LBlock
   m_TagString: Untagged
@@ -50,6 +51,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotationPoint: {x: 0, y: 0, z: 0}
   previousTime: 0
+  ClearLine: 0
+  spawner: {fileID: 0}
+--- !u!114 &5603744349951592154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709231148105405989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f6b5414631363a43a68a938ef8f81f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5310961079190448091
 GameObject:
   m_ObjectHideFlags: 0
