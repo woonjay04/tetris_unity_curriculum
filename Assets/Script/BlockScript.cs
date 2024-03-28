@@ -124,11 +124,8 @@ public class BlockScript : MonoBehaviour
     {
         for (int j = 0; j < GridWidth; j++)
         {
-            
             Destroy(Grid[j, i].gameObject);   
-            Grid[j, i] = null;
-
-            
+            Grid[j, i] = null;            
         }
         
     }
