@@ -14,10 +14,14 @@ public class BlockScript : MonoBehaviour
     public static int GridHeight = 20;
     public static int GridWidth = 10;
     public int ClearLine = 0;
-    private static Transform[,] Grid = new Transform[GridWidth, GridHeight];
 
     public GameObject spawner;
-
+    public BlockType blockType;
+    public enum BlockType
+    {
+        I = 1, J = 2, L = 3, O = 4, S = 5, T = 6, Z = 7
+    }
+    
     private void Start()
     {
         spawner = GameObject.Find("Spawner");
@@ -63,7 +67,6 @@ public class BlockScript : MonoBehaviour
             transform.position += new Vector3(0, -1, 0);
             if (!VaildMove())
             {
-                Debug.Log(this.gameObject.transform.position);
                 if(this.gameObject.transform.position == new Vector3(5,17,0))
                 {
                     FindObjectOfType<SpawnTetrimino>().GameOver();
@@ -85,7 +88,10 @@ public class BlockScript : MonoBehaviour
             int RoundedX = Mathf.RoundToInt(children.transform.position.x);
             int RoundedY = Mathf.RoundToInt(children.transform.position.y);
 
-            Grid[RoundedX,RoundedY] = children;
+            ScoreScript.Grid[RoundedX,RoundedY] = children;
+            ScoreScript.ColorGrid[RoundedX,RoundedY] = (int)blockType;
+            Debug.Log(ScoreScript.Grid[RoundedX, RoundedY]);
+            Debug.Log(ScoreScript.ColorGrid[RoundedX, RoundedY]);
         }
     }
 
@@ -113,21 +119,24 @@ public class BlockScript : MonoBehaviour
     {
         for(int j = 0; j < GridWidth; j++)
         {
-            if (Grid[j, i] == null)
+            if (ScoreScript.Grid[j, i] == null)
             {
                 return false;
             }
         }
         return true;
     }
-    void DeleteLine(int i)
+    public static void DeleteLine(int i)
     {
         for (int j = 0; j < GridWidth; j++)
         {
-            Destroy(Grid[j, i].gameObject);   
-            Grid[j, i] = null;            
+            if (ScoreScript.Grid[j, i] != null)
+            {
+                Destroy(ScoreScript.Grid[j, i].gameObject);
+                ScoreScript.Grid[j, i] = null;
+                ScoreScript.ColorGrid[j, i] = 0;
+            }
         }
-        
     }
 
     void RowDown(int i)
@@ -136,11 +145,14 @@ public class BlockScript : MonoBehaviour
         {
             for(int j = 0; j < GridWidth; j++)
             {
-                if (Grid[j, y] != null)
+                if (ScoreScript.Grid[j, y] != null)
                 {
-                    Grid[j, y-1] = Grid[j, y];
-                    Grid[j, y] = null;
-                    Grid[j, y-1].transform.position -= new Vector3(0,1,0);
+                    ScoreScript.Grid[j, y-1] = ScoreScript.Grid[j, y];
+                    ScoreScript.ColorGrid[j, y-1] = ScoreScript.ColorGrid[j, y];
+                    ScoreScript.Grid[j, y] = null;
+                    ScoreScript.ColorGrid[j, y] = 0;
+                    ScoreScript.Grid[j, y-1].transform.position -= new Vector3(0,1,0);
+
                 }
             }
         }
@@ -155,7 +167,7 @@ public class BlockScript : MonoBehaviour
             {
                 return false;
             }
-            if (Grid[RoundedX, RoundedY] != null)
+            if (ScoreScript.Grid[RoundedX, RoundedY] != null)
             {
                 return false;
             }

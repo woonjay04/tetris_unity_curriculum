@@ -18,6 +18,13 @@ public class SpawnTetrimino : MonoBehaviour
         GameObject obj = Instantiate(Tetriminoes[Random.Range(0,Tetriminoes.Length)],transform.position, Quaternion.identity);
         obj.transform.parent = transform;
     }
+    public static void SpawnLoadBlocks(string BlockName, int xpos, int ypos)
+    {
+        GameObject OneBlock = Resources.Load<GameObject>(BlockName);
+        GameObject obj = Instantiate(OneBlock,new Vector3(xpos,ypos,0),Quaternion.identity);
+        GameObject spawnObject = GameObject.Find("Spawner");
+        obj.transform.parent = spawnObject.transform;
+    }
     public void GameOver()
     {
         foreach(Transform children in transform)

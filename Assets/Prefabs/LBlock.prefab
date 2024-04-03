@@ -53,6 +53,7 @@ MonoBehaviour:
   previousTime: 0
   ClearLine: 0
   spawner: {fileID: 0}
+  blockType: 3
 --- !u!114 &5603744349951592154
 MonoBehaviour:
   m_ObjectHideFlags: 0

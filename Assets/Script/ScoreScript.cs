@@ -4,14 +4,18 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.IO;
+using Newtonsoft.Json;
+using System.Collections.Specialized;
 
 public class ScoreScript : MonoBehaviour
 {
+    public static Transform[,] Grid = new Transform[BlockScript.GridWidth, BlockScript.GridHeight];
+    public static int[,] ColorGrid = new int[BlockScript.GridWidth, BlockScript.GridHeight];
     public Boolean Crash;
     public static int ScoreNumber;
     private int LastScore;
     public TextMeshProUGUI ScoreText;
-    private string path;
+    private static string path;
     void Start()
     {
         path = Path.Combine(Application.dataPath, "Data.json");
@@ -26,10 +30,72 @@ public class ScoreScript : MonoBehaviour
             ScoreText.text = ScoreNumber.ToString();
         }
     }
-    public void GetBlockDataList()
+    public static void SaveData()
     {
-        //BlockDataList = new List<BlockData>();
+        Data data = new Data(ScoreNumber,BlockScript.GridWidth, BlockScript.GridHeight, ColorGrid);
+        Debug.Log(data);
+        try
+        {
+            string json = data.ToJson();
+            File.WriteAllText(path, json);
+            Debug.Log("success save");
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("save failed : " + e.Message);
+        }
+    }
 
+    public static void LoadData()
+    {
+        if(File.Exists(path))
+        {
+            Debug.Log("Load!");
+            for(int i = BlockScript.GridHeight-1; i >= 0; i--)
+            {
+                BlockScript.DeleteLine(i);
+            }
+
+            String json = File.ReadAllText(path);
+            Data data = Data.FromJson(json);
+            ScoreNumber = data.Score;
+            int[,] newGrid = data.ToArray();
+            for(int i = 0; i < BlockScript.GridWidth; i++)
+            {
+                for(int j = 0; j < BlockScript.GridHeight; j++)
+                {
+                    
+                    ColorGrid[i,j] = newGrid[i,j];
+
+                    switch (ColorGrid[i, j])//int값에 따라 트랜스폼에 단일 프리팹 저장하는 코드 작성
+                    {
+                        case 1:
+                            SpawnTetrimino.SpawnLoadBlocks("Block1", i, j);
+                            break;
+                        case 2:
+                            SpawnTetrimino.SpawnLoadBlocks("Block2", i, j);
+                            break;
+                        case 3:
+                            SpawnTetrimino.SpawnLoadBlocks("Block3", i, j);
+                            break;
+                        case 4:
+                            SpawnTetrimino.SpawnLoadBlocks("Block4", i, j);
+                            break;
+                        case 5:
+                            SpawnTetrimino.SpawnLoadBlocks("Block5", i, j);
+                            break;
+                        case 6:
+                            SpawnTetrimino.SpawnLoadBlocks("Block6", i, j);
+                            break;
+                        case 7:
+                            SpawnTetrimino.SpawnLoadBlocks("Block7", i, j);
+                            break;
+                        case 0:
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -37,26 +103,28 @@ public class ScoreScript : MonoBehaviour
 public class Data
 {
     public int Score;//현재점수
-    public Transform[,] GridTrans;//그리드
-    public List<BlockData> BlockDataList;
-    public Data(int score, Transform[,] gridTrans, List<BlockData> blockDataList)
+    public int Rows;
+    public int Columns;
+    public int[,] ColorTrans {  get; set; }
+    
+    public Data(int score, int rows, int columns, int[,] colorTrans)
     {
-        this.Score = score;
-        this.GridTrans = gridTrans;
-        this.BlockDataList = new List<BlockData>(BlockDataList);
+        Score = score;
+        Rows = rows;
+        Columns = columns;
+        ColorTrans = colorTrans;
     }
-}
-
-[System.Serializable]
-public class BlockData
-{
-    public Vector3 position;
-    public Quaternion rotation;
-    public string name;
-    public BlockData(Vector3 position, Quaternion rotation, string name)
+    public string ToJson()
     {
-        this.position = position;
-        this.rotation = rotation;
-        this.name = name;
+        return JsonConvert.SerializeObject(this);
+    }
+
+    public static Data FromJson(string json)
+    {
+        return JsonConvert.DeserializeObject<Data>(json);
+    }
+    public int[,] ToArray()
+    {
+        return ColorTrans;
     }
 }

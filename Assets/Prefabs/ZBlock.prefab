@@ -139,6 +139,7 @@ MonoBehaviour:
   previousTime: 0
   ClearLine: 0
   spawner: {fileID: 0}
+  blockType: 7
 --- !u!114 &7986336800128266192
 MonoBehaviour:
   m_ObjectHideFlags: 0
